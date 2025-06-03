@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// View that displays a list of recipies.
+/// View that displays a list of recipes.
 struct RecipesView: View {
     @StateObject var viewModel = RecipesViewModel()
     
@@ -16,13 +16,21 @@ struct RecipesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                ForEach(1...10, id: \.self) {
-                    Text("Recipe \($0)")
+                VStack {
+                    ForEach(viewModel.recipes, id: \.self) { recipe in
+                        VStack {
+                            Text(recipe.name)
+                            Text(recipe.cuisine)
+                        }
+                    }
                 }
+                .frame(maxWidth: .infinity)
             }
             .navigationTitle("Recipes")
             .navigationBarTitleDisplayMode(.large)
-            .frame(maxWidth: .infinity)
+            .refreshable {
+                await viewModel.refreshRecipes()
+            }
         }
     }
 }
