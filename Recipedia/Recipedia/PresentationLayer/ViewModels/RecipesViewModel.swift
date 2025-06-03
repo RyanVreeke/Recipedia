@@ -7,6 +7,25 @@
 
 import SwiftUI
 
+/// RecipesViewModel handles the RecipesView properties and business logic.
+@MainActor
 final class RecipesViewModel: ObservableObject {
-    init() { }
+    @Published private(set) var recipes: [Recipe] = []
+    
+    private let recipeService = RecipeService.shared
+    
+    init() {
+        Task {
+            await refreshRecipes()
+        }
+    }
+    
+    func refreshRecipes() async {
+        do {
+            recipes = try await recipeService.getRecipes()
+        } catch {
+            // Reset recipes to be empty since the service failed.
+            recipes = []
+        }
+    }
 }
