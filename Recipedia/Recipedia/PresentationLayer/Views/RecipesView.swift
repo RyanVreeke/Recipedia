@@ -18,10 +18,7 @@ struct RecipesView: View {
             ScrollView {
                 VStack {
                     ForEach(viewModel.recipes, id: \.self) { recipe in
-                        VStack {
-                            Text(recipe.name)
-                            Text(recipe.cuisine)
-                        }
+                        RecipeCard(recipe)
                     }
                 }
                 .frame(maxWidth: .infinity)

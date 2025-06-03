@@ -46,7 +46,7 @@ struct RecipeJson: Decodable {
         Recipe(
             id: uuid,
             name: name,
-            cuisine: cuisine,
+            cuisine: Cuisine.from(cuisine),
             smallImageURL: photoURLSmall,
             largeImageURL: photoURLLarge,
             sourceURL: sourceURL,
