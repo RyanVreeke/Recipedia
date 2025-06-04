@@ -8,7 +8,7 @@
 import Foundation
 
 /// An in memory and disk storage cache used to store data for quick access.
-class Cache: CacheProtocol {
+final class Cache: CacheProtocol {
     private var memoryCache: [String: Data] = [:]
     private let fileManager: FileManager = .default
     private let diskCacheURL: URL
@@ -38,17 +38,22 @@ class Cache: CacheProtocol {
     /// - Parameter key: The key used to determine where to get the stored data from.
     /// - Returns: A optional Data object for what was stored.
     func get(_ key: String) -> Data? {
-        if let data = memoryCache[key] {
-            return data
+        var data: Data? = nil
+        
+        if let memoryData = memoryCache[key] {
+            data = memoryData
         }
         
         let filePath = diskCacheURL.appendingPathComponent(key)
         if let diskData = try? Data(contentsOf: filePath) {
-          memoryCache[key] = diskData
-          return diskData
+          data = diskData
         }
         
-        return nil
+        if let data = data {
+            set(key, data: data)
+        }
+        
+        return data
     }
     
     /// Sets the data to stored memory and disk storage.
