@@ -12,9 +12,9 @@ import SwiftUI
 final class RecipesViewModel: ObservableObject {
     @Published private(set) var recipes: [Recipe] = []
     
-    let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 16), count: 2)
-    
     private let recipeService = RecipeService.shared
+    
+    let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 16), count: 2)
     
     init() {
         Task {

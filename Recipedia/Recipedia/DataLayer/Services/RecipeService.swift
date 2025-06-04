@@ -49,8 +49,10 @@ final class RecipeService: RecipeServiceProtocol {
             return recipes
             
         } catch let decodingError as DecodingError {
+            print("Error decoding response: \(decodingError.localizedDescription)")
             throw decodingError
         } catch {
+            print("Error getting recipes: \(error.localizedDescription)")
             throw error
         }
     }

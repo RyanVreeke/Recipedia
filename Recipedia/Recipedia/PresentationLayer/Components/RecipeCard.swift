@@ -7,29 +7,36 @@
 
 import SwiftUI
 
+/// A RecipeCard View used to display recipes for the application.
 struct RecipeCard: View {
+    @State private var image: Image?
+    private let loader: ImageLoaderProtocol
     let recipe: Recipe
     
+    
+    /// RecipeCard initializer.
+    /// - Parameter recipe: The recipe used to provide information for the RecipeCard.
     init(_ recipe: Recipe) {
         self.recipe = recipe
+        self.loader = ImageLoader<Recipe>(recipe, cache: Cache(folderName: "RecipeImages")!)
     }
     
     var body: some View {
         VStack(spacing: 0) {
-            AsyncImage(url: recipe.smallImageURL) { result in
-                result.image?
+            if let image = image {
+                image
                     .resizable()
                     .scaledToFit()
-            }
-            .overlay(alignment: .topTrailing) {
-                VStack {
-                    Text(recipe.cuisine.displayName)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                        .truncationMode(.tail)
-                }
-                .cardStyle(edgeInsets: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
-                .padding([.top, .trailing], 8)
+                    .overlay(alignment: .topTrailing) {
+                        VStack {
+                            Text(recipe.cuisine.displayName)
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                                .truncationMode(.tail)
+                        }
+                        .cardStyle(edgeInsets: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+                        .padding([.top, .trailing], 8)
+                    }
             }
             
             Spacer(minLength: 0)
@@ -42,5 +49,18 @@ struct RecipeCard: View {
             Spacer(minLength: 0)
         }
         .cardStyle(edgeInsets: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+        .task {
+            if
+                let smallImageURL = recipe.smallImageURL,
+                let smallUIImage = await loader.loadImage(url: smallImageURL)
+            {
+                image = Image(uiImage: smallUIImage)
+            } else if
+                let largeImageURL = recipe.largeImageURL,
+                let largeUIImage = await loader.loadImage(url: largeImageURL)
+            {
+                image = Image(uiImage: largeUIImage)
+            }
+        }
     }
 }
