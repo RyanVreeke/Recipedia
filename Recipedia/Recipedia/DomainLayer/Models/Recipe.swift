@@ -11,7 +11,7 @@ import SwiftUI
 struct Recipe: Identifiable, Hashable {
     let id: UUID
     let name: String
-    let cuisine: String
+    let cuisine: Cuisine
     let smallImageURL: URL?
     let largeImageURL: URL?
     let sourceURL: URL?
@@ -29,7 +29,7 @@ struct Recipe: Identifiable, Hashable {
     init(
         id: UUID,
         name: String,
-        cuisine: String,
+        cuisine: Cuisine,
         smallImageURL: URL?,
         largeImageURL: URL?,
         sourceURL: URL?,
