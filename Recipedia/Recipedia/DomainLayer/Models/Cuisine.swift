@@ -101,7 +101,7 @@ enum Cuisine: Identifiable, Hashable, Equatable, CaseIterable {
         case "greek":
             return .greek
         default:
-            return .other(normalizedString.uppercased())
+            return .other(normalizedString.capitalized)
         }
     }
 }

@@ -16,18 +16,20 @@ struct RecipesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack {
+                LazyVGrid(columns: viewModel.columns, spacing: 16) {
                     ForEach(viewModel.recipes, id: \.self) { recipe in
                         RecipeCard(recipe)
                     }
                 }
-                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 16)
             }
             .navigationTitle("Recipes")
             .navigationBarTitleDisplayMode(.large)
             .refreshable {
                 await viewModel.refreshRecipes()
             }
+            .frame(maxWidth: .infinity)
+            .background(Color(UIColor.systemGroupedBackground), ignoresSafeAreaEdges: .all)
         }
     }
 }
