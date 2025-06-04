@@ -8,11 +8,10 @@
 import Foundation
 
 /// An in memory and disk storage cache used to store data for quick access.
-actor Cache: CacheProtocol {
+class Cache: CacheProtocol {
     private var memoryCache: [String: Data] = [:]
     private let fileManager: FileManager = .default
     private let diskCacheURL: URL
-    private let session: URLSession = URLSession.shared
     
     /// Cache optional initializer.
     /// - Parameter folderName: The folder to store the cached data.
@@ -36,11 +35,9 @@ actor Cache: CacheProtocol {
     }
     
     /// Gets the data that is stored in memory, disk storage, or through a network request.
-    /// - Parameter url: The url used to determine where to get the stored data from.
+    /// - Parameter key: The key used to determine where to get the stored data from.
     /// - Returns: A optional Data object for what was stored.
-    func get(_ url: URL) async -> Data? {
-        let key = url.absoluteString.sha256
-        
+    func get(_ key: String) -> Data? {
         if let data = memoryCache[key] {
             return data
         }
@@ -51,23 +48,27 @@ actor Cache: CacheProtocol {
           return diskData
         }
         
-        do {
-            let (data, _) = try await session.data(from: url)
-            memoryCache[key] = data
-            try data.write(to: filePath)
-            return data
-        } catch {
-            print("Error getting cached data: \(error.localizedDescription)")
-        }
-        
         return nil
     }
     
-    /// Removes the data that is stored in memory then disk storage.
-    /// - Parameter url: The url used to determine where to delete the stored data from.
-    func delete(_ url: URL) {
-        let key = url.absoluteString.sha256
+    /// Sets the data to stored memory and disk storage.
+    /// - Parameters:
+    ///   - key: The key used to determine where to set the data to be stored.
+    ///   - data: The data that will be stored in memory and on disk.
+    func set(_ key: String, data: Data) {
+        memoryCache[key] = data
         
+        let filePath = diskCacheURL.appendingPathComponent(key)
+        do {
+            try data.write(to: filePath)
+        } catch {
+            print("Error setting cached data: \(error.localizedDescription)")
+        }
+    }
+    
+    /// Removes the data that is stored in memory then disk storage.
+    /// - Parameter key: The key used to determine where to delete the stored data from.
+    func delete(_ key: String) {
         memoryCache.removeValue(forKey: key)
         
         let filePath = diskCacheURL.appendingPathComponent(key)

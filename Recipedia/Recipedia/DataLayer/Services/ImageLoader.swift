@@ -12,6 +12,7 @@ import SwiftUI
 final class ImageLoader<T>: ImageLoaderProtocol {
     private let object: T
     private let cache: CacheProtocol
+    private let session: URLSession = URLSession.shared
     
     /// ImageLoader initializer.
     /// - Parameters:
@@ -29,12 +30,22 @@ final class ImageLoader<T>: ImageLoaderProtocol {
     /// - Parameter url: The url used to determine the stored location of the cached image.
     /// - Returns: An optional UIImage if it exists in the cache.
     func loadImage(url: URL) async -> UIImage? {
-        guard
-            let data = await cache.get(url)
-        else {
-            return nil
+        let key = url.absoluteString.sha256
+        var image: UIImage? = nil
+        
+        if let data = cache.get(key) {
+            image = UIImage(data: data)
+        } else {
+            do {
+                let (data, _) = try await session.data(from: url)
+                cache.set(key, data: data)
+                
+                image = UIImage(data: data)
+            } catch {
+                print("Error getting cached data: \(error.localizedDescription)")
+            }
         }
         
-        return UIImage(data: data)
+        return image
     }
 }
