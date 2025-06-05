@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardStyleModifier: ViewModifier {
+private struct CardStyleModifier: ViewModifier {
     let edgeInsets: EdgeInsets
     
     func body(content: Content) -> some View {

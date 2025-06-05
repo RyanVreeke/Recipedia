@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Represents a recipe that will be displayed to the user where further cooking instructions and videos can be viewed.
-struct Recipe: Identifiable, Hashable {
+struct Recipe: Identifiable, Hashable, Sendable {
     let id: UUID
     let name: String
     let cuisine: Cuisine
@@ -42,5 +42,81 @@ struct Recipe: Identifiable, Hashable {
         self.largeImageURL = largeImageURL
         self.sourceURL = sourceURL
         self.videoURL = videoURL
+    }
+}
+
+extension Recipe {
+    static func buildAmericanRecipeMock() -> Self {
+        return Recipe(
+            id: UUID(uuidString: "f8b20884-1e54-4e72-a417-dabbc8d91f12")!,
+            name: "Banana Pancakes",
+            cuisine: .american,
+            smallImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b6efe075-6982-4579-b8cf-013d2d1a461b/small.jpg"),
+            largeImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b6efe075-6982-4579-b8cf-013d2d1a461b/large.jpg"),
+            sourceURL: URL(string: "https://www.bbcgoodfood.com/recipes/banana-pancakes"),
+            videoURL: URL(string: "https://www.youtube.com/watch?v=kSKtb2Sv-_U")
+        )
+    }
+    
+    static func buildMalaysianRecipeMock() -> Self {
+        return Recipe(
+            id: UUID(uuidString: "0c6ca6e7-e32a-4053-b824-1dbf749910d8")!,
+            name: "Apam Balik",
+            cuisine: .other("Malaysian"),
+            smallImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/small.jpg"),
+            largeImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/large.jpg"),
+            sourceURL: URL(string: "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ"),
+            videoURL: URL(string: "https://www.youtube.com/watch?v=6R8ffRRJcrg")
+        )
+    }
+    
+    static func buildRecipesMock() -> [Self] {
+        return [
+            Recipe(
+                id: UUID(),
+                name: "Mock Recipe Name 1",
+                cuisine: .american,
+                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
+                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
+                sourceURL: URL(string: "https://recipes.com/recipes/id"),
+                videoURL: URL(string: "https://youtube.com/watch?v=id")
+            ),
+            Recipe(
+                id: UUID(),
+                name: "Mock Recipe Name 2",
+                cuisine: .american,
+                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
+                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
+                sourceURL: URL(string: "https://recipes.com/recipes/id"),
+                videoURL: URL(string: "https://youtube.com/watch?v=id")
+            ),
+            Recipe(
+                id: UUID(),
+                name: "Mock Recipe Name 3",
+                cuisine: .american,
+                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
+                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
+                sourceURL: URL(string: "https://recipes.com/recipes/id"),
+                videoURL: URL(string: "https://youtube.com/watch?v=id")
+            ),
+            Recipe(
+                id: UUID(),
+                name: "Mock Recipe Name 4",
+                cuisine: .american,
+                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
+                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
+                sourceURL: URL(string: "https://recipes.com/recipes/id"),
+                videoURL: URL(string: "https://youtube.com/watch?v=id")
+            ),
+            Recipe(
+                id: UUID(),
+                name: "Mock Recipe Name 5",
+                cuisine: .american,
+                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
+                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
+                sourceURL: URL(string: "https://recipes.com/recipes/id"),
+                videoURL: URL(string: "https://youtube.com/watch?v=id")
+            ),
+        ]
     }
 }
