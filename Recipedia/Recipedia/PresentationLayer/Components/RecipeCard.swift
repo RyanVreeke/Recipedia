@@ -10,15 +10,14 @@ import SwiftUI
 /// A RecipeCard View used to display recipes for the application.
 struct RecipeCard: View {
     @State private var image: Image?
-    private let loader: ImageLoaderProtocol
-    let recipe: Recipe
-    
+    private let imageLoader: ImageLoaderProtocol
+    private let recipe: Recipe
     
     /// RecipeCard initializer.
     /// - Parameter recipe: The recipe used to provide information for the RecipeCard.
     init(_ recipe: Recipe) {
         self.recipe = recipe
-        self.loader = ImageLoader<Recipe>(recipe, cache: Cache(folderName: "RecipeImages")!)
+        self.imageLoader = ImageLoader<Recipe>(recipe, cache: Cache(folderName: "RecipeImages")!)
     }
     
     var body: some View {
@@ -29,7 +28,7 @@ struct RecipeCard: View {
                     .scaledToFit()
                     .overlay(alignment: .topTrailing) {
                         VStack {
-                            Text(recipe.cuisine.displayName)
+                            Text(recipe.cuisine.description)
                                 .font(.headline)
                                 .foregroundStyle(.primary)
                                 .truncationMode(.tail)
@@ -40,27 +39,55 @@ struct RecipeCard: View {
             }
             
             Spacer(minLength: 0)
+            
             Text(recipe.name)
                 .font(.headline)
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .padding(.all, 8)
+            
             Spacer(minLength: 0)
         }
         .cardStyle(edgeInsets: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         .task {
             if
                 let smallImageURL = recipe.smallImageURL,
-                let smallUIImage = await loader.loadImage(url: smallImageURL)
+                let smallUIImage = await imageLoader.loadImage(url: smallImageURL)
             {
                 image = Image(uiImage: smallUIImage)
-            } else if
-                let largeImageURL = recipe.largeImageURL,
-                let largeUIImage = await loader.loadImage(url: largeImageURL)
-            {
-                image = Image(uiImage: largeUIImage)
             }
         }
     }
+}
+
+#Preview("American Recipe") {
+    VStack {
+        RecipeCard(Recipe.buildAmericanRecipeMock())
+            .padding(.all, 16)
+            .frame(width: 300, height: 300)
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color(UIColor.secondarySystemBackground))
+}
+
+#Preview("Malaysian Recipe") {
+    VStack {
+        RecipeCard(Recipe.buildMalaysianRecipeMock())
+            .padding(.all, 16)
+            .frame(width: 300, height: 300)
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color(UIColor.secondarySystemBackground))
+}
+
+#Preview("Dark Mode American Recipe") {
+    VStack {
+        RecipeCard(Recipe.buildAmericanRecipeMock())
+            .padding(.all, 16)
+            .frame(width: 300, height: 300)
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color(UIColor.systemGroupedBackground))
+    .preferredColorScheme(.dark)
 }

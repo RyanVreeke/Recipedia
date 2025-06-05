@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// Enum Cuisine is used to display recipe cuisine information and filter recipes.
-enum Cuisine: Identifiable, Hashable, Equatable, CaseIterable {
+enum Cuisine: Identifiable, Hashable, CustomStringConvertible, Equatable, CaseIterable {
     case american
     case british
     case canadian
@@ -55,7 +55,7 @@ enum Cuisine: Identifiable, Hashable, Equatable, CaseIterable {
         }
     }
     
-    var displayName: String {
+    var description: String {
         return "\(self.id) \(self.flag)"
     }
     

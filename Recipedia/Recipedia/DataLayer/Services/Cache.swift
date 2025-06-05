@@ -8,7 +8,7 @@
 import Foundation
 
 /// An in memory and disk storage cache used to store data for quick access.
-final class Cache: CacheProtocol {
+final actor Cache: CacheProtocol {
     private var memoryCache: [String: Data] = [:]
     private let fileManager: FileManager = .default
     private let diskCacheURL: URL

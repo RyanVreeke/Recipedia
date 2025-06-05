@@ -18,13 +18,20 @@ struct RecipesView: View {
             ScrollView {
                 LazyVGrid(columns: viewModel.columns, spacing: 16) {
                     ForEach(viewModel.recipes, id: \.self) { recipe in
-                        RecipeCard(recipe)
+                        NavigationLink(value: recipe) {
+                            RecipeCard(recipe)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal, 16)
             }
             .navigationTitle("Recipes")
             .navigationBarTitleDisplayMode(.large)
+            .navigationDestination(for: Recipe.self) { recipe in
+                RecipeView(recipe)
+                    .padding(.horizontal, 16)
+            }
             .refreshable {
                 await viewModel.refreshRecipes()
             }
@@ -34,6 +41,11 @@ struct RecipesView: View {
     }
 }
 
-#Preview {
+#Preview("Recipes View") {
     RecipesView()
+}
+
+#Preview("Dark Mode Recipes View") {
+    RecipesView()
+        .preferredColorScheme(.dark)
 }
