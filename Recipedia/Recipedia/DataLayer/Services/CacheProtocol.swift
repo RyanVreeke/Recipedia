@@ -8,7 +8,7 @@
 import Foundation
 
 /// Cache protocol that is set up for a Cache and tests.
-protocol CacheProtocol {
+protocol CacheProtocol: Actor {
     func get(_ key: String) -> Data?
     func set(_ key: String, data: Data)
     func delete(_ key: String)
