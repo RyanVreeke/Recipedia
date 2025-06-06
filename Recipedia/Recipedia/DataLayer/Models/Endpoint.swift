@@ -24,7 +24,7 @@ class Endpoint: EndpointProtocol {
         baseURL: String,
         path: String,
         httpMethod: HTTPMethod,
-        headers: [String : String]?
+        headers: [String : String]? = nil
     ) {
         self.baseURL = baseURL
         self.path = path
@@ -32,6 +32,8 @@ class Endpoint: EndpointProtocol {
         self.headers = headers
     }
     
+    /// Creates a URLRequest to be used in network calls.
+    /// - Returns: A URL request with the given Endpoint information.
     func urlRequest() throws -> URLRequest {
         guard let url = URL(string: "\(baseURL)\(path)") else {
             throw URLError(.badURL)
@@ -44,5 +46,25 @@ class Endpoint: EndpointProtocol {
         }
         
         return request
+    }
+}
+
+extension Endpoint {
+    static func buildGetEndpointMock() -> Endpoint {
+        return Endpoint(
+            baseURL: "https://d3jbb8n5wk0qxi.cloudfront.net",
+            path: "/recipes.com",
+            httpMethod: .get,
+            headers: ["Accept": "application/json"]
+        )
+    }
+    
+    static func buildInvalidURLGetEndpointMock() -> Endpoint {
+        return Endpoint(
+            baseURL: "",
+            path: "",
+            httpMethod: .get,
+            headers: ["Accept": "application/json"]
+        )
     }
 }

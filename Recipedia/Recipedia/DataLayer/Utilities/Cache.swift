@@ -8,8 +8,7 @@
 import Foundation
 
 /// An in memory and disk storage cache used to store data for quick access.
-final actor Cache: CacheProtocol {
-    private var memoryCache: [String: Data] = [:]
+actor Cache: CacheProtocol {
     private let fileManager: FileManager = .default
     private let diskCacheURL: URL
     
@@ -40,17 +39,9 @@ final actor Cache: CacheProtocol {
     func get(_ key: String) -> Data? {
         var data: Data? = nil
         
-        if let memoryData = memoryCache[key] {
-            data = memoryData
-        }
-        
         let filePath = diskCacheURL.appendingPathComponent(key)
         if let diskData = try? Data(contentsOf: filePath) {
-          data = diskData
-        }
-        
-        if let data = data {
-            set(key, data: data)
+            data = diskData
         }
         
         return data
@@ -61,8 +52,6 @@ final actor Cache: CacheProtocol {
     ///   - key: The key used to determine where to set the data to be stored.
     ///   - data: The data that will be stored in memory and on disk.
     func set(_ key: String, data: Data) {
-        memoryCache[key] = data
-        
         let filePath = diskCacheURL.appendingPathComponent(key)
         do {
             try data.write(to: filePath)
@@ -74,13 +63,19 @@ final actor Cache: CacheProtocol {
     /// Removes the data that is stored in memory then disk storage.
     /// - Parameter key: The key used to determine where to delete the stored data from.
     func delete(_ key: String) {
-        memoryCache.removeValue(forKey: key)
-        
         let filePath = diskCacheURL.appendingPathComponent(key)
         do {
             try fileManager.removeItem(at: filePath)
         } catch {
             print("Error removing cached data: \(error.localizedDescription)")
+        }
+    }
+    
+    /// Clears the in memory and disk storage cached data.
+    func clear() {
+        let files = (try? fileManager.contentsOfDirectory(at: diskCacheURL, includingPropertiesForKeys: nil)) ?? []
+        for file in files {
+            try? fileManager.removeItem(at: file)
         }
     }
 }

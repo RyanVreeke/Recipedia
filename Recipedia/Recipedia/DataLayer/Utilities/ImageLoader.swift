@@ -5,15 +5,14 @@
 //  Created by Ryan Vreeke on 6/3/25.
 //
 
-import Foundation
 import SwiftUI
 
 /// ImageLoader utilizes a recipe and a cache in order to load stored images on the disk.
-@MainActor
-final class ImageLoader<T>: ImageLoaderProtocol {
+actor ImageLoader<T>: ImageLoaderProtocol {
     private let object: T
     private let cache: CacheProtocol
-    private let session: URLSession = URLSession.shared
+    
+    var urlSession: URLSession
     
     /// ImageLoader initializer.
     /// - Parameters:
@@ -21,24 +20,28 @@ final class ImageLoader<T>: ImageLoaderProtocol {
     ///   - cache: The cache used to retrieve the stored data on the disk.
     init(
         _ object: T,
-        cache: CacheProtocol
+        cache: CacheProtocol,
+        urlSession: URLSession = .shared
     ) {
         self.object = object
         self.cache = cache
+        self.urlSession = urlSession
     }
     
     /// Load an image from a cache.
     /// - Parameter url: The url used to determine the stored location of the cached image.
-    /// - Returns: An optional UIImage if it exists in the cache.
-    func loadImage(url: URL) async -> UIImage? {
+    /// - Returns: An option tuple of a optional UIImage and a Bool to determine if the UIImage was retrieved from the cache or network.
+    func loadImage(url: URL) async -> (UIImage?, Bool)? {
         let key = url.absoluteString.sha256
         var image: UIImage? = nil
+        var cacheHit = false
         
         if let data = await cache.get(key) {
             image = UIImage(data: data)
+            cacheHit = true
         } else {
             do {
-                let (data, _) = try await session.data(from: url)
+                let (data, _) = try await urlSession.data(from: url)
                 await cache.set(key, data: data)
                 
                 image = UIImage(data: data)
@@ -47,6 +50,6 @@ final class ImageLoader<T>: ImageLoaderProtocol {
             }
         }
         
-        return image
+        return (image, cacheHit)
     }
 }

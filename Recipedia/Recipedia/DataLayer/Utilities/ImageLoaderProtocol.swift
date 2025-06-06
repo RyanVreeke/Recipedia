@@ -5,10 +5,10 @@
 //  Created by Ryan Vreeke on 6/3/25.
 //
 
-import Foundation
 import SwiftUI
 
 /// ImageLoader protocol that is set up for the ImageLoader and tests.
-protocol ImageLoaderProtocol: Sendable {
-    func loadImage(url: URL) async -> UIImage?
+protocol ImageLoaderProtocol: Actor {
+    var urlSession: URLSession { get }
+    func loadImage(url: URL) async -> (UIImage?, Bool)?
 }

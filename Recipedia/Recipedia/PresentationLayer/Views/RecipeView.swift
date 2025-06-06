@@ -7,11 +7,14 @@
 
 import SwiftUI
 
+/// View that displays a recipe's information and links.
 struct RecipeView: View {
     @State private var image: Image?
     private let imageLoader: ImageLoaderProtocol
     private let recipe: Recipe
     
+    /// Initializes a RecipeView.
+    /// - Parameter recipe: The recipe used to provide display information for the RecipeView.
     init(_ recipe: Recipe) {
         self.recipe = recipe
         self.imageLoader = ImageLoader(recipe, cache: Cache(folderName: "RecipeImages")!)
@@ -41,7 +44,11 @@ struct RecipeView: View {
                         .scaledToFit()
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                 } else {
-                    ProgressView()
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .redacted(reason: .placeholder)
                 }
                 
                 HStack(spacing: 16) {
@@ -66,12 +73,16 @@ struct RecipeView: View {
                     }
                 }
             }
+            .padding(.all, 16)
             .task {
                 if
                     let largeImageURL = recipe.largeImageURL,
-                    let largeUIImage = await imageLoader.loadImage(url: largeImageURL)
+                    let (largeUIImage, cacheHit) = await imageLoader.loadImage(url: largeImageURL),
+                    let uiImage = largeUIImage
                 {
-                    image = Image(uiImage: largeUIImage)
+                    withAnimation(cacheHit ? .none : .easeIn) {
+                        image = Image(uiImage: uiImage)
+                    }
                 }
             }
         }
