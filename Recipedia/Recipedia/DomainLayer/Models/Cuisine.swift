@@ -100,6 +100,8 @@ enum Cuisine: Identifiable, Hashable, CustomStringConvertible, Equatable, CaseIt
             return .french
         case "greek":
             return .greek
+        case "italian":
+            return .italian
         default:
             return .other(normalizedString.capitalized)
         }

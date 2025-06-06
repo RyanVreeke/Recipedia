@@ -11,6 +11,13 @@ import SwiftUI
 @MainActor
 final class RecipesViewModel: ObservableObject {
     @Published private(set) var recipes: [Recipe] = []
+    @Published private(set) var filteredRecipes: [Recipe] = []
+    @Published var searchText: String = "" {
+        didSet { filterRecipes() }
+    }
+    @Published private(set) var selectedCuisines: [Cuisine] = [] {
+        didSet { filterRecipes() }
+    }
     @Published var viewState: ViewState = .loading
     
     private let recipeService = RecipeService.shared
@@ -27,12 +34,37 @@ final class RecipesViewModel: ObservableObject {
         do {
             recipes = try await recipeService.getRecipes()
             
+            filterRecipes()
+            
             viewState = recipes.isEmpty ? .empty : .loaded
         } catch {
             // Reset recipes to be empty since the service failed.
             recipes = []
             
             viewState = .error
+        }
+    }
+    
+    func toggleCuisineSelection(_ cuisine: Cuisine) {
+        if let index = selectedCuisines.firstIndex(of: cuisine) {
+            selectedCuisines.remove(at: index)
+        } else {
+            selectedCuisines.append(cuisine)
+        }
+    }
+    
+    private func filterRecipes() {
+        withAnimation(.easeInOut) {
+            filteredRecipes = recipes.filter {
+                let textMatches = searchText.isEmpty
+                || $0.name.localizedCaseInsensitiveContains(searchText)
+                || $0.cuisine.id.localizedCaseInsensitiveContains(searchText)
+                
+                let cuisineMatches = selectedCuisines.isEmpty
+                || selectedCuisines.contains($0.cuisine)
+                
+                return textMatches && cuisineMatches
+            }
         }
     }
 }

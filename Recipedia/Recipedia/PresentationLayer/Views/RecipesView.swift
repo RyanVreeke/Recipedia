@@ -16,6 +16,23 @@ struct RecipesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(Cuisine.allCases) { cuisine in
+                            Button {
+                                viewModel.toggleCuisineSelection(cuisine)
+                            } label: {
+                                Text(cuisine.description)
+                                    .foregroundStyle(.primary)
+                            }
+                            .buttonStyle(
+                                PillButtonStyle(color: viewModel.selectedCuisines.contains(cuisine) ? .blue : .gray)
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+                
                 switch viewModel.viewState {
                 case .loading:
                     ProgressView()
@@ -35,14 +52,15 @@ struct RecipesView: View {
                     .padding(.all, 16)
                 case .loaded:
                     LazyVGrid(columns: viewModel.columns, spacing: 16) {
-                        ForEach(viewModel.recipes, id: \.self) { recipe in
+                        ForEach(viewModel.filteredRecipes, id: \.self) { recipe in
                             NavigationLink(value: recipe) {
                                 RecipeCard(recipe)
                             }
                             .buttonStyle(.plain)
                         }
                     }
-                    .padding(.all, 16)
+                    .padding(.top, 8)
+                    .padding([.horizontal, .bottom], 16)
                 }
             }
             .navigationTitle("Recipes")
@@ -53,6 +71,11 @@ struct RecipesView: View {
             .refreshable {
                 await viewModel.refreshRecipes()
             }
+            .searchable(
+                text: $viewModel.searchText,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Search recipes or cuisines"
+            )
             .frame(maxWidth: .infinity)
             .background(Color(UIColor.systemGroupedBackground), ignoresSafeAreaEdges: .all)
         }

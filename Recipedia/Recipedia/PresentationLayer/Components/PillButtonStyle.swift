@@ -9,11 +9,9 @@ import SwiftUI
 
 struct PillButtonStyle: ButtonStyle {
     let color: UIColor
-    let isCircle: Bool
 
-    init(color: UIColor, isCircle: Bool = false) {
+    init(color: UIColor) {
         self.color = color
-        self.isCircle = isCircle
     }
 
     func makeBody(configuration: Configuration) -> some View {
@@ -21,11 +19,10 @@ struct PillButtonStyle: ButtonStyle {
 
         configuration.label
             .padding(.vertical, 8)
-            .padding(.horizontal, self.isCircle ? 8 : 12)
+            .padding(.horizontal, 12)
             .fontWeight(.semibold)
-            .background(configuration.isPressed ? backgroundColor.opacity(0.1) : backgroundColor)
-            .foregroundColor(Color(self.color))
-            .clipShape(self.isCircle ? AnyShape(Circle()) : AnyShape(RoundedRectangle(cornerRadius: 20)))
+            .background(configuration.isPressed ? backgroundColor.opacity(0.5) : backgroundColor)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
             .scaleEffect(configuration.isPressed ? 0.90 : 1.0) // Slight shrink effect when pressed
             .animation(.easeInOut(duration: 0.2), value: configuration.isPressed)
     }
