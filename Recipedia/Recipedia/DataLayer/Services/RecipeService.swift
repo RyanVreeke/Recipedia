@@ -11,24 +11,47 @@ import Foundation
 final class RecipeService: RecipeServiceProtocol {
     static let shared: RecipeService = RecipeService()
     
-    private let session: URLSession = URLSession.shared
     private let baseURL: String = "https://d3jbb8n5wk0qxi.cloudfront.net"
     private let decoder: JSONDecoder = JSONDecoder()
+    
+    var urlSession: URLSession
+    
+    init(urlSession: URLSession = .shared) {
+        self.urlSession = urlSession
+    }
     
     /// Gets the recipes from the created endpoint.
     /// - Returns: An array of the retrieved Recipe objects.
     func getRecipes() async throws -> [Recipe] {
+        // Commented out endpoints for testing.
+        /*
+         let emptyEndpoint = Endpoint(
+             baseURL: baseURL,
+             path: "/recipes-empty.json",
+             httpMethod: .get,
+             headers: ["Accept" : "application/json"]
+         )
+        */
+        /*
+         let malformedEndpoint = Endpoint(
+             baseURL: baseURL,
+             path: "/recipes-malformed.json",
+             httpMethod: .get,
+             headers: ["Accept" : "application/json"]
+         )
+         */
+        
         let endpoint = Endpoint(
             baseURL: baseURL,
             path: "/recipes.json",
             httpMethod: .get,
-            headers: ["Accept" : "application/json"]
+            headers: ["Accept": "application/json"]
         )
         
         do {
             let request = try endpoint.urlRequest() // Create the URLRequest based off the created Endpoint.
             
-            let (data, response) = try await session.data(for: request)
+            let (data, response) = try await urlSession.data(for: request)
             
             /*
              Checking for all successful http status codes.
@@ -48,9 +71,6 @@ final class RecipeService: RecipeServiceProtocol {
             let recipes = recipesResponse.map { $0.toModel() } // Map the recipes to the pretty model object.
             return recipes
             
-        } catch let decodingError as DecodingError {
-            print("Error decoding response: \(decodingError.localizedDescription)")
-            throw decodingError
         } catch {
             print("Error getting recipes: \(error.localizedDescription)")
             throw error

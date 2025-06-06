@@ -22,20 +22,27 @@ struct RecipeCard: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if let image = image {
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .overlay(alignment: .topTrailing) {
-                        VStack {
-                            Text(recipe.cuisine.description)
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-                                .truncationMode(.tail)
-                        }
-                        .cardStyle(edgeInsets: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
-                        .padding([.top, .trailing], 8)
-                    }
+            VStack {
+                if let image = image {
+                    image
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .redacted(reason: .placeholder)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                VStack {
+                    Text(recipe.cuisine.description)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                        .truncationMode(.tail)
+                }
+                .cardStyle(edgeInsets: EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+                .padding([.top, .trailing], 8)
             }
             
             Spacer(minLength: 0)
@@ -53,9 +60,12 @@ struct RecipeCard: View {
         .task {
             if
                 let smallImageURL = recipe.smallImageURL,
-                let smallUIImage = await imageLoader.loadImage(url: smallImageURL)
+                let (smallUIImage, cacheHit) = await imageLoader.loadImage(url: smallImageURL),
+                let uiImage = smallUIImage
             {
-                image = Image(uiImage: smallUIImage)
+                withAnimation(cacheHit ? .none : .easeIn) {
+                    image = Image(uiImage: uiImage)
+                }
             }
         }
     }

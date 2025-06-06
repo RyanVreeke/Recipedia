@@ -24,13 +24,12 @@ struct RecipesView: View {
                         .buttonStyle(.plain)
                     }
                 }
-                .padding(.horizontal, 16)
+                .padding(.all, 16)
             }
             .navigationTitle("Recipes")
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(for: Recipe.self) { recipe in
                 RecipeView(recipe)
-                    .padding(.horizontal, 16)
             }
             .refreshable {
                 await viewModel.refreshRecipes()

@@ -73,49 +73,31 @@ extension Recipe {
     static func buildRecipesMock() -> [Self] {
         return [
             Recipe(
-                id: UUID(),
-                name: "Mock Recipe Name 1",
+                id: UUID(uuidString: "f8b20884-1e54-4e72-a417-dabbc8d91f12")!,
+                name: "Banana Pancakes",
                 cuisine: .american,
-                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
-                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
-                sourceURL: URL(string: "https://recipes.com/recipes/id"),
-                videoURL: URL(string: "https://youtube.com/watch?v=id")
+                smallImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b6efe075-6982-4579-b8cf-013d2d1a461b/small.jpg"),
+                largeImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b6efe075-6982-4579-b8cf-013d2d1a461b/large.jpg"),
+                sourceURL: URL(string: "https://www.bbcgoodfood.com/recipes/banana-pancakes"),
+                videoURL: URL(string: "https://www.youtube.com/watch?v=kSKtb2Sv-_U")
             ),
             Recipe(
-                id: UUID(),
-                name: "Mock Recipe Name 2",
-                cuisine: .american,
-                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
-                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
-                sourceURL: URL(string: "https://recipes.com/recipes/id"),
-                videoURL: URL(string: "https://youtube.com/watch?v=id")
+                id: UUID(uuidString: "0c6ca6e7-e32a-4053-b824-1dbf749910d8")!,
+                name: "Apam Balik",
+                cuisine: .other("Malaysian"),
+                smallImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/small.jpg"),
+                largeImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/b9ab0071-b281-4bee-b361-ec340d405320/large.jpg"),
+                sourceURL: URL(string: "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ"),
+                videoURL: URL(string: "https://www.youtube.com/watch?v=6R8ffRRJcrg")
             ),
             Recipe(
-                id: UUID(),
-                name: "Mock Recipe Name 3",
-                cuisine: .american,
-                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
-                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
-                sourceURL: URL(string: "https://recipes.com/recipes/id"),
-                videoURL: URL(string: "https://youtube.com/watch?v=id")
-            ),
-            Recipe(
-                id: UUID(),
-                name: "Mock Recipe Name 4",
-                cuisine: .american,
-                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
-                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
-                sourceURL: URL(string: "https://recipes.com/recipes/id"),
-                videoURL: URL(string: "https://youtube.com/watch?v=id")
-            ),
-            Recipe(
-                id: UUID(),
-                name: "Mock Recipe Name 5",
-                cuisine: .american,
-                smallImageURL: URL(string: "https://images.com/photos/id/small.jpg"),
-                largeImageURL: URL(string: "https://images.com/photos/id/large.jpg"),
-                sourceURL: URL(string: "https://recipes.com/recipes/id"),
-                videoURL: URL(string: "https://youtube.com/watch?v=id")
+                id: UUID(uuidString: "599344f4-3c5c-4cca-b914-2210e3b3312f")!,
+                name: "Apple & Blackberry Crumble",
+                cuisine: .british,
+                smallImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/535dfe4e-5d61-4db6-ba8f-7a27b1214f5d/small.jpg"),
+                largeImageURL: URL(string: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/535dfe4e-5d61-4db6-ba8f-7a27b1214f5d/large.jpg"),
+                sourceURL: URL(string: "https://www.bbcgoodfood.com/recipes/778642/apple-and-blackberry-crumble"),
+                videoURL: URL(string: "https://www.youtube.com/watch?v=4vhcOwVBDO4")
             ),
         ]
     }

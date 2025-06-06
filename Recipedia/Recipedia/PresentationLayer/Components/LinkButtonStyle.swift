@@ -18,7 +18,7 @@ struct LinkButtonStyle: ButtonStyle {
         configuration.label
             .padding(.vertical, 12)
             .padding(.horizontal, 16)
-            .font(.title)
+            .font(.title2)
             .fontWeight(.semibold)
             .foregroundColor(.primary)
             .frame(maxWidth: .infinity)
