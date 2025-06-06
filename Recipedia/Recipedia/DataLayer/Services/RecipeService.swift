@@ -24,8 +24,10 @@ final class RecipeService: RecipeServiceProtocol {
     /// - Returns: An array of the retrieved Recipe objects.
     func getRecipes() async throws -> [Recipe] {
         // Commented out endpoints for testing.
+        
+        // Empty Endpoint
         /*
-         let emptyEndpoint = Endpoint(
+         let endpoint = Endpoint(
              baseURL: baseURL,
              path: "/recipes-empty.json",
              httpMethod: .get,
@@ -33,7 +35,8 @@ final class RecipeService: RecipeServiceProtocol {
          )
         */
         /*
-         let malformedEndpoint = Endpoint(
+         // Malformed Endpoint
+         let endpoint = Endpoint(
              baseURL: baseURL,
              path: "/recipes-malformed.json",
              httpMethod: .get,
@@ -70,7 +73,6 @@ final class RecipeService: RecipeServiceProtocol {
             let recipesResponse = try decoder.decode(RecipeJson.Response.self, from: data).recipes
             let recipes = recipesResponse.map { $0.toModel() } // Map the recipes to the pretty model object.
             return recipes
-            
         } catch {
             print("Error getting recipes: \(error.localizedDescription)")
             throw error

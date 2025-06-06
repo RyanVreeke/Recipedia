@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "EE183787-3349-4E25-A554-B59550C8F7E2",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Recipedia.xcodeproj",
+        "identifier" : "4CA094D92DEF3C8C00E36C31",
+        "name" : "RecipediaTests"
+      }
+    }
+  ],
+  "version" : 1
+}

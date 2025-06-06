@@ -11,6 +11,7 @@ import SwiftUI
 @MainActor
 final class RecipesViewModel: ObservableObject {
     @Published private(set) var recipes: [Recipe] = []
+    @Published var viewState: ViewState = .loading
     
     private let recipeService = RecipeService.shared
     
@@ -25,9 +26,13 @@ final class RecipesViewModel: ObservableObject {
     func refreshRecipes() async {
         do {
             recipes = try await recipeService.getRecipes()
+            
+            viewState = recipes.isEmpty ? .empty : .loaded
         } catch {
             // Reset recipes to be empty since the service failed.
             recipes = []
+            
+            viewState = .error
         }
     }
 }
