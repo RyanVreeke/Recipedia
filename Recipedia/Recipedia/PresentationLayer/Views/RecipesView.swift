@@ -68,6 +68,20 @@ struct RecipesView: View {
             .navigationDestination(for: Recipe.self) { recipe in
                 RecipeView(recipe)
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            viewModel.isSingleColumn.toggle()
+                        }
+                    } label: {
+                        viewModel.isSingleColumn
+                        ? Image(systemName: "rectangle.grid.1x2")
+                        : Image(systemName: "rectangle.grid.2x2")
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
             .refreshable {
                 await viewModel.refreshRecipes()
             }

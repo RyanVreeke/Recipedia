@@ -14,7 +14,7 @@ struct RecipediaApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RecipesView()
+            RootView()
         }
     }
 }
