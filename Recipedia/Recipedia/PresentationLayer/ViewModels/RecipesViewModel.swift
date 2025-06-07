@@ -19,10 +19,19 @@ final class RecipesViewModel: ObservableObject {
         didSet { filterRecipes() }
     }
     @Published var viewState: ViewState = .loading
+    @Published var isSingleColumn: Bool = false {
+        didSet {
+            if(isSingleColumn) {
+                columns = [GridItem(.flexible())]
+            } else {
+                columns = Array(repeating: .init(.flexible(), spacing: 16), count: 2)
+            }
+        }
+    }
+    
+    var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 16), count: 2)
     
     private let recipeService = RecipeService.shared
-    
-    let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 16), count: 2)
     
     init() {
         Task {
@@ -46,6 +55,7 @@ final class RecipesViewModel: ObservableObject {
     }
     
     func toggleCuisineSelection(_ cuisine: Cuisine) {
+        triggerHapticFeedback()
         if let index = selectedCuisines.firstIndex(of: cuisine) {
             selectedCuisines.remove(at: index)
         } else {
