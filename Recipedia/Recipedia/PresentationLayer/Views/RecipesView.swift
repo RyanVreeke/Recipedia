@@ -55,6 +55,7 @@ struct RecipesView: View {
                         ForEach(viewModel.filteredRecipes, id: \.self) { recipe in
                             NavigationLink(value: recipe) {
                                 RecipeCard(recipe)
+                                    .environmentObject(viewModel)
                             }
                             .buttonStyle(.plain)
                         }

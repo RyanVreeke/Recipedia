@@ -9,6 +9,7 @@ import SwiftUI
 
 /// A RecipeCard View used to display recipes for the application.
 struct RecipeCard: View {
+    @EnvironmentObject private var viewModel: RecipesViewModel
     @State private var image: Image?
     private let imageLoader: ImageLoaderProtocol
     private let recipe: Recipe
@@ -57,11 +58,11 @@ struct RecipeCard: View {
             Spacer(minLength: 0)
         }
         .cardStyle(edgeInsets: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-        .task {
+        .task(id: viewModel.isSingleColumn) {
             if
-                let smallImageURL = recipe.smallImageURL,
-                let (smallUIImage, cacheHit) = await imageLoader.loadImage(url: smallImageURL),
-                let uiImage = smallUIImage
+                let imageURL = viewModel.isSingleColumn ? recipe.largeImageURL : recipe.smallImageURL,
+                let (uiImage, cacheHit) = await imageLoader.loadImage(url: imageURL),
+                let uiImage = uiImage
             {
                 withAnimation(cacheHit ? .none : .easeIn) {
                     image = Image(uiImage: uiImage)
