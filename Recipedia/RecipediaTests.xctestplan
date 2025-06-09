@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "2EAD72E2-50C7-45F0-BC88-D34604A032CA",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Recipedia.xcodeproj",
+        "identifier" : "4CA094D92DEF3C8C00E36C31",
+        "name" : "RecipediaTests"
+      }
+    }
+  ],
+  "version" : 1
+}

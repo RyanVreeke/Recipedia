@@ -30,7 +30,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Recipedia.xctestplan">
+            reference = "container:Recipedia.xctestplan"
+            default = "YES">
          </TestPlanReference>
       </TestPlans>
       <Testables>
